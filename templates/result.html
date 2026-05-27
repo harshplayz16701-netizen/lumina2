@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina Skin — Your Scientific Skincare Report</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo">LUMINA<span>SKIN</span><span class="logo-dot"></span></a>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/upload">New Scan</a></li>
+                    <li><a href="/#faq">FAQ</a></li>
+                    {% if logged_user %}
+                        {% if logged_user.role == 'admin' %}
+                            <li><a href="/admin">Admin Panel</a></li>
+                        {% endif %}
+                        <li style="background: rgba(140, 191, 169, 0.15); padding: 8px 16px; border-radius: 100px; font-size: 13px; font-weight: 500; color: var(--color-sage-dark); display: flex; align-items: center; gap: 6px;">
+                            💎 <span>{{ logged_user.credits }}</span> Credits
+                        </li>
+                        <li><a href="/pricing" style="font-weight: 500; color: var(--color-sage-dark); font-size: 14px;">Buy Credits</a></li>
+                        <li><button id="btn-result-signout" style="font-weight: 500; color: #c95d43; font-size: 14px;">Sign Out</button></li>
+                    {% else %}
+                        <li><a href="/login">Sign In</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-padding" style="padding-bottom: 80px;">
+        
+        <!-- Results Summary Section -->
+        <section>
+            <span class="section-tag">Analysis Complete</span>
+            <h2 class="section-title">Your Skin Blueprint</h2>
+            <p class="section-subtitle">Based on scientific facial geometry and localized texture analysis. Reference ID: #LS-{{ user.id }}</p>
+
+            <div class="results-container">
+                
+                <!-- Left Column: Glowing Mesh Overlay Image -->
+                <div class="results-image-frame">
+                    <img src="{{ user.uploaded_image }}" alt="Facial Mesh Reading">
+                    <span class="results-badge">Facial Mesh Active</span>
+                </div>
+
+                <!-- Right Column: Scores and Shape Info -->
+                <div class="glass-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                    <div>
+                        <div class="skin-score-card">
+                            <div class="skin-score-circle">
+                                <div style="text-align: center;">
+                                    <div class="skin-score-value">{{ recommendations.scores.overall }}</div>
+                                    <div class="skin-score-label">/100</div>
+                                </div>
+                            </div>
+                            <div class="score-details">
+                                <h3>Skin Score</h3>
+                                <p>Optimal clinical balance indicator</p>
+                            </div>
+                        </div>
+
+                        <hr style="border: 0; border-top: 1px solid var(--color-border); margin: 20px 0;">
+
+                        <!-- Face Shape and Skin Type Indicators -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                            <div style="background: var(--color-white); padding: 16px; border-radius: 16px; border: 1px solid var(--color-border);">
+                                <span style="font-size: 11px; text-transform: uppercase; color: var(--color-sage); font-weight: 600;">Detected Shape</span>
+                                <h4 style="font-size: 20px; font-weight: 500; margin-top: 4px;">{{ user.face_shape }}</h4>
+                            </div>
+                            <div style="background: var(--color-white); padding: 16px; border-radius: 16px; border: 1px solid var(--color-border);">
+                                <span style="font-size: 11px; text-transform: uppercase; color: var(--color-sage); font-weight: 600;">Baseline Skin Type</span>
+                                <h4 style="font-size: 20px; font-weight: 500; margin-top: 4px;">{{ user.skin_type }}</h4>
+                            </div>
+                        </div>
+
+                        <!-- Detected Concerns Badges -->
+                        <div style="text-align: left; margin-bottom: 24px;">
+                            <span style="font-size: 12px; font-weight: 500; color: var(--color-charcoal-muted); display: block; margin-bottom: 8px;">Identified Conditions:</span>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                {% if user.detected_issues %}
+                                    {% for issue in user.detected_issues.split(',') %}
+                                        <span class="badge" style="background: #f4f6f5; color: var(--color-charcoal); border: 1px solid var(--color-border);">{{ issue.strip() }}</span>
+                                    {% endfor %}
+                                {% else: %}
+                                    <span class="badge" style="background: #f4f6f5; color: var(--color-charcoal); border: 1px solid var(--color-border);">General Support</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subscores details sliders -->
+                    <div class="subscores-list">
+                        <div class="subscore-item">
+                            <div class="subscore-header">
+                                <span>Hydration & Plumpness</span>
+                                <span>{{ recommendations.scores.hydration }}%</span>
+                            </div>
+                            <div class="subscore-bar-bg">
+                                <div class="subscore-bar-fill" style="width: {{ recommendations.scores.hydration }}%;"></div>
+                            </div>
+                        </div>
+                        <div class="subscore-item">
+                            <div class="subscore-header">
+                                <span>Blemish & Acne Clarity</span>
+                                <span>{{ recommendations.scores.clarity }}%</span>
+                            </div>
+                            <div class="subscore-bar-bg">
+                                <div class="subscore-bar-fill" style="width: {{ recommendations.scores.clarity }}%;"></div>
+                            </div>
+                        </div>
+                        <div class="subscore-item">
+                            <div class="subscore-header">
+                                <span>Texture Smoothness</span>
+                                <span>{{ recommendations.scores.texture }}%</span>
+                            </div>
+                            <div class="subscore-bar-bg">
+                                <div class="subscore-bar-fill" style="width: {{ recommendations.scores.texture }}%;"></div>
+                            </div>
+                        </div>
+                        <div class="subscore-item">
+                            <div class="subscore-header">
+                                <span>Oil / Sebum Balance</span>
+                                <span>{{ recommendations.scores.oil_balance }}%</span>
+                            </div>
+                            <div class="subscore-bar-bg">
+                                <div class="subscore-bar-fill" style="width: {{ recommendations.scores.oil_balance }}%;"></div>
+                            </div>
+                        </div>
+                        <div class="subscore-item">
+                            <div class="subscore-header">
+                                <span>Tone Uniformity</span>
+                                <span>{{ recommendations.scores.tone }}%</span>
+                            </div>
+                            <div class="subscore-bar-bg">
+                                <div class="subscore-bar-fill" style="width: {{ recommendations.scores.tone }}%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Custom Routine Program -->
+            <div class="glass-card" style="margin-bottom: 56px;">
+                <span class="section-tag">Scientific Routine</span>
+                <h2 style="font-size: 32px; margin-bottom: 32px; text-align: left;">Your Personalized Skincare Program</h2>
+                
+                <div class="routine-grid">
+                    
+                    <!-- Morning Routine -->
+                    <div class="routine-card">
+                        <h3>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                            Morning Routine
+                        </h3>
+                        <div class="routine-steps">
+                            {% for step in recommendations.routine.morning_routine %}
+                                <div class="routine-step">
+                                    <div class="step-bullet">{{ loop.index }}</div>
+                                    <div class="step-text">{{ step }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Evening Routine -->
+                    <div class="routine-card">
+                        <h3>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                            Evening Routine
+                        </h3>
+                        <div class="routine-steps">
+                            {% for step in recommendations.routine.evening_routine %}
+                                <div class="routine-step">
+                                    <div class="step-bullet">{{ loop.index }}</div>
+                                    <div class="step-text">{{ step }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid var(--color-border); margin: 32px 0;">
+
+                <!-- Ingredients & Clinical Warnings -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; text-align: left;">
+                    <div>
+                        <h4 style="font-size: 16px; font-weight: 500; margin-bottom: 12px; color: var(--color-sage-dark);">Active Ingredients to Target</h4>
+                        <div class="ingredients-badges">
+                            {% for ing in recommendations.routine.ingredients_to_use %}
+                                <span class="badge badge-use">{{ ing }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 16px; font-weight: 500; margin-bottom: 12px; color: #c95d43;">Ingredients to Strict Avoid</h4>
+                        <div class="ingredients-badges">
+                            {% for ing in recommendations.routine.ingredients_to_avoid %}
+                                <span class="badge badge-avoid">{{ ing }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Lifestyle Tips -->
+            <div class="glass-card" style="margin-bottom: 56px; text-align: left;">
+                <span class="section-tag">Lifestyle Parameters</span>
+                <h2 style="font-size: 32px; margin-bottom: 20px;">Supportive Habits & Diet</h2>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 16px;">
+                    {% for tip in recommendations.routine.lifestyle_tips %}
+                        <li style="display: flex; gap: 12px; align-items: flex-start;">
+                            <span style="color: var(--color-sage); font-size: 18px; line-height: 1;">✦</span>
+                            <p style="font-size: 15px; color: var(--color-charcoal); line-height: 1.5;">{{ tip }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Curated Skincare Products -->
+            <div>
+                <span class="section-tag">Luxury Curation</span>
+                <h2 class="section-title">Your Recommended Apothecary</h2>
+                <p class="section-subtitle">We have filtered out products that contain active ingredients matching your avoidance criteria, selecting only luxury solutions targeted for your skin type.</p>
+
+                <div class="products-carousel">
+                    {% for product in recommendations.products %}
+                        <div class="product-item">
+                            <div class="product-image-container">
+                                {% if product.image == '/static/images/products/placeholder.jpg' or not product.image %}
+                                    <div class="product-image-placeholder">
+                                        🧴
+                                    </div>
+                                {% else: %}
+                                    <img src="{{ product.image }}" alt="{{ product.product_name }}" class="product-item-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="product-image-placeholder" style="display: none; width: 100%; height: 100%; position: absolute; top:0; left:0;">
+                                        🧴
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="product-info">
+                                <div>
+                                    <span class="product-type">{{ product.product_type }}</span>
+                                    <h4 class="product-title">{{ product.product_name }}</h4>
+                                    <p class="product-desc">{{ product.description }}</p>
+                                </div>
+                                {% if product.product_link %}
+                                    <a href="{{ product.product_link }}" target="_blank" class="btn-primary" style="width: 100%; justify-content: center; padding: 10px 0; font-size: 13px; margin-top: 16px; border-radius: 12px; text-decoration: none; text-align: center;">
+                                        Buy Now
+                                    </a>
+                                {% else %}
+                                    <button type="button" class="btn-secondary" style="width: 100%; justify-content: center; padding: 10px 0; font-size: 13px; margin-top: 16px; border-radius: 12px;">
+                                        View Formulation
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer style="background-color: var(--color-primary-mint); border-top: 1px solid var(--color-border); padding: 40px 24px; text-align: center; font-size: 13px; color: var(--color-charcoal-muted);">
+        <p>&copy; 2026 Lumina Skin Inc. Secure Localized Skin Reading System.</p>
+    </footer>
+
+    <!-- Firebase Sign-Out (v10 Modular) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAA0DmT_ld_FWiwWnnz78e6XbvWs-B9eFg",
+            authDomain: "lumina-6d262.firebaseapp.com",
+            projectId: "lumina-6d262",
+            storageBucket: "lumina-6d262.firebasestorage.app",
+            messagingSenderId: "397169702043",
+            appId: "1:397169702043:web:27f6c78380bb534273823e",
+            measurementId: "G-E7X424RWLK"
+        };
+
+        const app  = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const signOutBtn = document.getElementById('btn-result-signout');
+        if (signOutBtn) {
+            signOutBtn.addEventListener('click', async () => {
+                try { await signOut(auth); } catch (e) { console.warn(e); }
+                window.location.href = '/logout';
+            });
+        }
+    </script>
+</body>
+</html>

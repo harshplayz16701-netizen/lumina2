@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina Skin — Premium Credit Plans</title>
+    <meta name="description" content="Choose a credit plan to start your premium scientific skincare analysis. Face analysis scan packages tailored to your journey.">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Extra custom styles for pricing page matching the design system */
+        .pricing-section {
+            padding: 80px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .pricing-header {
+            margin-bottom: 60px;
+        }
+        .pricing-header h1 {
+            font-size: 48px;
+            font-weight: 500;
+            line-height: 1.15;
+            background: linear-gradient(135deg, var(--color-charcoal), var(--color-sage-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+        .pricing-header p {
+            font-size: 18px;
+            color: var(--color-charcoal-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+            margin-bottom: 80px;
+            align-items: stretch;
+        }
+        .plan-card {
+            background: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-card);
+            padding: 48px 32px;
+            text-align: left;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: var(--transition-smooth);
+            box-shadow: var(--shadow-glass);
+            overflow: hidden;
+        }
+        .plan-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-premium);
+            border-color: var(--color-sage);
+        }
+        .plan-card.recommended {
+            border: 2.5px solid var(--color-sage);
+            background: linear-gradient(180deg, var(--color-white) 0%, rgba(220, 245, 236, 0.25) 100%);
+        }
+        .recommended-badge {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: var(--color-sage-dark);
+            color: var(--color-white);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+        }
+        .plan-tag {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-sage);
+            margin-bottom: 24px;
+            display: block;
+        }
+        .plan-credits {
+            font-size: 56px;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            color: var(--color-sage-dark);
+            line-height: 1;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .plan-credits span {
+            font-size: 32px;
+        }
+        .plan-price {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--color-charcoal);
+            margin-bottom: 28px;
+        }
+        .plan-desc {
+            font-size: 14px;
+            color: var(--color-charcoal-muted);
+            line-height: 1.6;
+            margin-bottom: 32px;
+            min-height: 48px;
+        }
+        .plan-features {
+            list-style: none;
+            margin-bottom: 40px;
+            border-top: 1px solid var(--color-border);
+            padding-top: 32px;
+            flex-grow: 1;
+        }
+        .plan-features li {
+            font-size: 14px;
+            color: var(--color-charcoal);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .plan-features li svg {
+            color: var(--color-sage);
+            flex-shrink: 0;
+        }
+        .btn-buy-now {
+            width: 100%;
+            justify-content: center;
+            padding: 16px;
+            border-radius: var(--radius-pill);
+            font-size: 15px;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition-smooth);
+        }
+        .how-it-works-pricing {
+            background: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-card);
+            padding: 56px 40px;
+            text-align: left;
+            max-width: 900px;
+            margin: 0 auto;
+            box-shadow: var(--shadow-glass);
+        }
+        .how-it-works-pricing h2 {
+            font-size: 28px;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        .pricing-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+        }
+        .pricing-step {
+            position: relative;
+        }
+        .pricing-step-num {
+            width: 36px;
+            height: 36px;
+            background-color: var(--color-primary-mint);
+            color: var(--color-sage-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        .pricing-step h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        .pricing-step p {
+            font-size: 13px;
+            color: var(--color-charcoal-muted);
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo">LUMINA<span>SKIN</span><span class="logo-dot"></span></a>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/#features">Science</a></li>
+                    <li><a href="/#how-it-works">How It Works</a></li>
+                    {% if user %}
+                        {% if user.role == 'admin' %}
+                            <li><a href="/admin">Admin Panel</a></li>
+                        {% endif %}
+                        <li style="background: rgba(140, 191, 169, 0.15); padding: 8px 16px; border-radius: 100px; font-size: 13px; font-weight: 500; color: var(--color-sage-dark); display: flex; align-items: center; gap: 6px;">
+                            💎 <span>{{ user.credits }}</span> Credits
+                        </li>
+                        <li><a href="/upload" class="nav-cta">Start Analysis</a></li>
+                        <li><button id="btn-pricing-signout" style="font-weight: 500; color: #c95d43; font-size: 14px;">Sign Out</button></li>
+                    {% else %}
+                        <li><a href="/login">Sign In</a></li>
+                        <li><a href="/upload" class="nav-cta">Start Analysis</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-padding">
+        <section class="pricing-section">
+            <div class="pricing-header">
+                <span class="section-tag">Premium Scan Credits</span>
+                <h1>Perfect skin begins with scientific clarity.</h1>
+                <p>Select a credit package to start mapping your face and unlocking custom, database-driven skincare routines. Scans cost exactly 10 credits each.</p>
+            </div>
+
+            <!-- Credit Plans Grid -->
+            <div class="plans-grid">
+                
+                <!-- Package 1: Starter -->
+                <div class="plan-card">
+                    <div>
+                        <span class="plan-tag">Starter Package</span>
+                        <div class="plan-credits">
+                            <span>💎</span>35
+                        </div>
+                        <div style="font-size: 12px; color: var(--color-charcoal-muted); margin-bottom: 12px;">Credits included</div>
+                        <div class="plan-price">₹49</div>
+                        <p class="plan-desc">Great for getting started, running an initial face analysis, and finding your routine matches.</p>
+                        
+                        <ul class="plan-features">
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                3 Full Face Analysis Scans (10 cr/each)
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                5 Residual Scan Credits
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Full Scientific Wireframe Mapping
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Personal Database Routine Curation
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="https://ig.me/m/lumina.skinai?text=I%20want%20access%20of%20Lumina%20AI" target="_blank" rel="noopener" class="btn-secondary btn-buy-now">
+                        Buy Starter Pack
+                    </a>
+                </div>
+
+                <!-- Package 2: Standard (Recommended) -->
+                <div class="plan-card recommended">
+                    <span class="recommended-badge">Best Value</span>
+                    <div>
+                        <span class="plan-tag" style="color: var(--color-sage-dark);">Standard Package</span>
+                        <div class="plan-credits">
+                            <span>💎</span>85
+                        </div>
+                        <div style="font-size: 12px; color: var(--color-charcoal-muted); margin-bottom: 12px;">Credits included</div>
+                        <div class="plan-price">₹99</div>
+                        <p class="plan-desc">Ideal for tracking skin improvement over time and adjusting routines for seasonal changes.</p>
+                        
+                        <ul class="plan-features">
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                8 Full Face Analysis Scans (10 cr/each)
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Track Routine Progress History
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Complete Facial Mesh & Proportions
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Advanced Redness & Acne Pixels Mapping
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="https://ig.me/m/lumina.skinai?text=I%20want%20access%20of%20Lumina%20AI" target="_blank" rel="noopener" class="btn-primary btn-buy-now">
+                        Buy Standard Pack
+                    </a>
+                </div>
+
+                <!-- Package 3: Premium -->
+                <div class="plan-card">
+                    <div>
+                        <span class="plan-tag">Premium Package</span>
+                        <div class="plan-credits">
+                            <span>💎</span>135
+                        </div>
+                        <div style="font-size: 12px; color: var(--color-charcoal-muted); margin-bottom: 12px;">Credits included</div>
+                        <div class="plan-price">₹149</div>
+                        <p class="plan-desc">For skincare obsessives who want comprehensive continuous mapping and immediate routine adjustments.</p>
+                        
+                        <ul class="plan-features">
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                13 Full Face Analysis Scans (10 cr/each)
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Comprehensive Multi-Scan Tracking
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Full Premium Database Access
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Highest Priority Support & Fast Scanning
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="https://ig.me/m/lumina.skinai?text=I%20want%20access%20of%20Lumina%20AI" target="_blank" rel="noopener" class="btn-secondary btn-buy-now">
+                        Buy Premium Pack
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- How Purchase Works -->
+            <div class="how-it-works-pricing">
+                <h2>How Credits Addition Works</h2>
+                <div class="pricing-steps">
+                    <div class="pricing-step">
+                        <div class="pricing-step-num">1</div>
+                        <h3>Select Package</h3>
+                        <p>Choose your credit plan and click "Buy Now" to navigate to our official Instagram page.</p>
+                    </div>
+                    <div class="pricing-step">
+                        <div class="pricing-step-num">2</div>
+                        <h3>Send DM</h3>
+                        <p>Send us a direct message on Instagram mentioning your chosen plan and account email.</p>
+                    </div>
+                    <div class="pricing-step">
+                        <div class="pricing-step-num">3</div>
+                        <h3>Instant Top-Up</h3>
+                        <p>Once confirmed, our admin manually adds your credits to Firestore, syncing it instantly to your account.</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <a href="/" class="logo" style="margin-bottom: 16px;">LUMINA<span>SKIN</span><span class="logo-dot"></span></a>
+                <p style="font-size: 13px; color: var(--color-charcoal-muted); line-height: 1.6;">Where luxury aesthetics meet clinical database logic. Science-backed routines without the AI guesswork.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="/#features">Science</a></li>
+                    <li><a href="/#how-it-works">How It Works</a></li>
+                    <li><a href="/upload">Start Analysis</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Admin Space</h4>
+                <ul>
+                    <li><a href="/login">Admin Login</a></li>
+                    <li><a href="/register">Register</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Lumina Skin Inc. All rights reserved.</p>
+            <p>Designed with Apple-Inspired Scientific Aesthetics.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase Sign-Out (v10 Modular) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAA0DmT_ld_FWiwWnnz78e6XbvWs-B9eFg",
+            authDomain: "lumina-6d262.firebaseapp.com",
+            projectId: "lumina-6d262",
+            storageBucket: "lumina-6d262.firebasestorage.app",
+            messagingSenderId: "397169702043",
+            appId: "1:397169702043:web:27f6c78380bb534273823e",
+            measurementId: "G-E7X424RWLK"
+        };
+
+        const app  = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const signOutBtn = document.getElementById('btn-pricing-signout');
+        if (signOutBtn) {
+            signOutBtn.addEventListener('click', async () => {
+                try { await signOut(auth); } catch (e) { console.warn(e); }
+                window.location.href = '/logout';
+            });
+        }
+    </script>
+</body>
+</html>

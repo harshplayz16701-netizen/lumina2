@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina Skin — Create Account</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo">LUMINA<span>SKIN</span><span class="logo-dot"></span></a>
+        </div>
+    </header>
+
+    <main class="main-padding" style="min-height: calc(100vh - 120px); display: flex; align-items: center; justify-content: center; padding-bottom: 40px;">
+        <section style="width: 100%; max-width: 480px; padding: 40px 24px;">
+            
+            <div class="glass-card" style="text-align: center; background: rgba(255, 255, 255, 0.85);">
+                <span class="section-tag">Access Gateway</span>
+                <h2 style="font-size: 30px; margin-bottom: 12px;">Create Account</h2>
+                <p style="color: var(--color-charcoal-muted); font-size: 14px; margin-bottom: 32px;">Register to save your skin blueprint logs and check diagnostic histories.</p>
+
+                <div id="error-alert" style="display: none; color: #c95d43; background: #fbeee9; border: 1px solid rgba(201,93,67,0.15); padding: 12px; border-radius: 12px; font-size: 13px; margin-bottom: 20px; text-align: left;">
+                </div>
+
+                <div id="success-alert" style="display: none; color: var(--color-sage-dark); background: var(--color-primary-mint); border: 1px solid var(--color-border); padding: 12px; border-radius: 12px; font-size: 13px; margin-bottom: 20px; text-align: left;">
+                </div>
+
+                <form id="register-form" style="text-align: left; margin-bottom: 24px;">
+                    <div class="form-group">
+                        <label for="email-field">Email Address</label>
+                        <input type="email" id="email-field" placeholder="Choose email address" required>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 24px;">
+                        <label for="password-field">Password</label>
+                        <input type="password" id="password-field" placeholder="Choose a secure password (min. 6 chars)" minlength="6" required>
+                    </div>
+
+                    <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;" id="btn-register">
+                        Register Account
+                    </button>
+                </form>
+
+                <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 24px; color: var(--color-charcoal-muted); font-size: 13px;">
+                    <hr style="flex: 1; border: 0; border-top: 1px solid var(--color-border);">
+                    <span>or</span>
+                    <hr style="flex: 1; border: 0; border-top: 1px solid var(--color-border);">
+                </div>
+
+                <button id="google-signin-btn" class="btn-secondary" style="width: 100%; justify-content: center; margin-bottom: 24px; gap: 8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12.24 10.285V13.4h6.887C18.2 15.614 15.645 18 12.24 18c-3.86 0-7-3.14-7-7s3.14-7 7-7c1.7 0 3.25.61 4.47 1.617l2.45-2.45C17.475 1.7 15 1 12.24 1 6.584 1 2 5.584 2 11.24s4.584 10.24 10.24 10.24c5.795 0 10.24-4.065 10.24-10.24 0-.693-.082-1.353-.22-1.955H12.24z"/>
+                    </svg>
+                    Register with Google
+                </button>
+
+                <p style="margin-top: 24px; font-size: 13px; color: var(--color-charcoal-muted);">
+                    Already have an account? <a href="/login" style="color: var(--color-sage-dark); font-weight: 500; text-decoration: underline;">Sign in here</a>
+                </p>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background-color: var(--color-primary-mint); border-top: 1px solid var(--color-border); padding: 30px 24px; text-align: center; font-size: 12px; color: var(--color-charcoal-muted);">
+        <p>&copy; 2026 Lumina Skin Inc. Secure Localized Skin Reading System.</p>
+    </footer>
+
+    <!-- Firebase Auth + Firestore Integration (v10 Modular Syntax) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // ── Firebase Configuration ────────────────────────────────────────────────
+        const firebaseConfig = {
+            apiKey: "AIzaSyAA0DmT_ld_FWiwWnnz78e6XbvWs-B9eFg",
+            authDomain: "lumina-6d262.firebaseapp.com",
+            projectId: "lumina-6d262",
+            storageBucket: "lumina-6d262.firebasestorage.app",
+            messagingSenderId: "397169702043",
+            appId: "1:397169702043:web:27f6c78380bb534273823e",
+            measurementId: "G-E7X424RWLK"
+        };
+
+        const app  = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db   = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        const registerForm  = document.getElementById('register-form');
+        const googleBtn     = document.getElementById('google-signin-btn');
+        const errorAlert    = document.getElementById('error-alert');
+        const successAlert  = document.getElementById('success-alert');
+
+        function showAlert(type, msg) {
+            if (type === 'error') {
+                errorAlert.textContent   = msg;
+                errorAlert.style.display   = 'block';
+                successAlert.style.display = 'none';
+            } else {
+                successAlert.textContent   = msg;
+                successAlert.style.display = 'block';
+                errorAlert.style.display   = 'none';
+            }
+        }
+
+        // ── Create Firestore user document if it doesn't exist ───────────────────
+        async function ensureFirestoreUser(user) {
+            const userRef  = doc(db, 'users', user.uid);
+            const snapshot = await getDoc(userRef);
+            let credits = 0;
+
+            if (!snapshot.exists()) {
+                await setDoc(userRef, {
+                    uid:       user.uid,
+                    name:      user.displayName || user.email.split('@')[0],
+                    email:     user.email,
+                    credits:   0,
+                    createdAt: serverTimestamp()
+                });
+                credits = 0;
+            } else {
+                credits = snapshot.data().credits ?? 0;
+            }
+            return credits;
+        }
+
+        // ── Sync with Flask backend ───────────────────────────────────────────────
+        async function syncWithBackend(user) {
+            try {
+                const credits  = await ensureFirestoreUser(user);
+                const response = await fetch('/login-firebase', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        uid:          user.uid,
+                        email:        user.email,
+                        display_name: user.displayName || user.email.split('@')[0],
+                        credits:      credits
+                    })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    showAlert('success', 'Registered successfully. Logging you in…');
+                    setTimeout(() => { window.location.href = data.redirect; }, 900);
+                } else {
+                    showAlert('error', data.error || 'Backend synchronization failed.');
+                }
+            } catch (err) {
+                console.error('Sync error:', err);
+                showAlert('error', 'Failed to connect to backend server.');
+            }
+        }
+
+        // ── Email / Password Registration ─────────────────────────────────────────
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email    = document.getElementById('email-field').value.trim();
+            const password = document.getElementById('password-field').value;
+            try {
+                const credential = await createUserWithEmailAndPassword(auth, email, password);
+                await syncWithBackend(credential.user);
+            } catch (error) {
+                console.error('Firebase register error:', error);
+                let msg = 'Could not complete registration.';
+                if (error.code === 'auth/email-already-in-use') {
+                    msg = 'An account with this email already exists.';
+                } else if (error.code === 'auth/weak-password') {
+                    msg = 'Password should be at least 6 characters.';
+                } else if (error.code === 'auth/invalid-email') {
+                    msg = 'The email address is invalid.';
+                }
+                showAlert('error', msg);
+            }
+        });
+
+        // ── Google Register / Sign In ─────────────────────────────────────────────
+        googleBtn.addEventListener('click', async () => {
+            try {
+                const result = await signInWithPopup(auth, provider);
+                await syncWithBackend(result.user);
+            } catch (error) {
+                console.error('Google register error:', error);
+                if (error.code !== 'auth/popup-closed-by-user') {
+                    showAlert('error', 'Google authentication was cancelled or failed.');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

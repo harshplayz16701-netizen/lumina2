@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina Skin — Premium Scientific Skincare Analysis</title>
+    <meta name="description" content="Discover your skin's perfect matches. Lumina Skin combines computer vision face mapping with professional dermatology matrices to create highly personalized, AI-free skincare routines.">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="nav-container">
+            <a href="/" class="logo">LUMINA<span>SKIN</span><span class="logo-dot"></span></a>
+            <nav>
+                <ul>
+                    <li><a href="#features">Science</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#benefits">Benefits</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    {% if user %}
+                        {% if user.role == 'admin' %}
+                            <li><a href="/admin">Admin Panel</a></li>
+                        {% endif %}
+                        <li style="background: rgba(140, 191, 169, 0.15); padding: 8px 16px; border-radius: 100px; font-size: 13px; font-weight: 500; color: var(--color-sage-dark); display: flex; align-items: center; gap: 6px;">
+                            💎 <span>{{ user.credits }}</span> Credits
+                        </li>
+                        <li><a href="/pricing" style="font-weight: 500; color: var(--color-sage-dark); font-size: 14px;">Buy Credits</a></li>
+                        <li><button id="btn-index-signout" style="font-weight: 500; color: #c95d43; font-size: 14px;">Sign Out</button></li>
+                    {% else %}
+                        <li><a href="/login">Sign In</a></li>
+                    {% endif %}
+                    <li><a href="/upload" class="nav-cta">Start Analysis</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-padding">
+        
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <span class="section-tag">Welcome to Lumina Skin</span>
+                <h1>Discover your skin's true blueprint.</h1>
+                <p>An intelligent, scientific approach to skincare. Using local facial geometry calculations and texture scanning, we map your unique face shape and condition to curate custom, database-driven skincare routines.</p>
+                <div class="hero-actions">
+                    <a href="/upload" class="btn-primary" id="btn-hero-start">
+                        Start Analysis 
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </a>
+                    <a href="#how-it-works" class="btn-secondary">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-visuals">
+                <div class="hero-circle-bg"></div>
+                <div class="hero-preview-card">
+                    <!-- Standard high-end placeholder visual styled like an active face scanner -->
+                    <img src="https://i.ibb.co/VcHsSkpJ/Gemini-Generated-Image-mp09tkmp09tkmp09.png" alt="Lumina Skin Facial Mapping" class="hero-preview-img">
+                    <div class="hero-scanner-line"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features">
+            <span class="section-tag">Advanced Technology</span>
+            <h2 class="section-title">Computer vision meets scientific curation.</h2>
+            <p class="section-subtitle">We don't rely on random AI generators. Our backend executes localized image logic to measure proportions and texture features accurately.</p>
+            
+            <div class="features-grid">
+                <div class="glass-card feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    </div>
+                    <h3>Geometric Mesh Mapping</h3>
+                    <p>Calculates relative distances between 468 landmark points to identify your precise face shape for specialized anti-aging routines.</p>
+                </div>
+                
+                <div class="glass-card feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path><path d="M2 12h20"></path></svg>
+                    </div>
+                    <h3>Texture & Color Diagnostics</h3>
+                    <p>Applies advanced pixel filters to evaluate T-Zone oils, dry zones, visual acne count, redness clusters, and dark eye contours.</p>
+                </div>
+                
+                <div class="glass-card feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    </div>
+                    <h3>Rule-Based Curation Matrix</h3>
+                    <p>Locks your face type and issues into a strict, dermatologist-crafted recommendation matrix that maps actual premium products.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section id="how-it-works" style="background: rgba(220, 245, 236, 0.25); border-radius: 32px; padding: 80px 48px;">
+            <span class="section-tag">Simple & Secure</span>
+            <h2 class="section-title">Your journey to absolute clarity.</h2>
+            
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <h3>Face Scan</h3>
+                    <p>Upload a clean, well-lit photo from your gallery or capture a selfie in real-time using our premium camera interface.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <h3>Proportion Analysis</h3>
+                    <p>Our backend runs facial landmark algorithms and texture analytics, mapping glowing guides onto your selfie.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">03</div>
+                    <h3>Skincare Curation</h3>
+                    <p>Verify your details and receive a customized, medical-grade report outlining morning and night routines, score diagnostics, and curated products.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits Section -->
+        <section id="benefits">
+            <span class="section-tag">Why Lumina Skin</span>
+            <h2 class="section-title">Crafted for the discerning individual.</h2>
+            <p class="section-subtitle">A premium experience with professional accuracy, designed with clinical parameters in mind.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
+                <div>
+                    <img src="https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?auto=format&fit=crop&q=80&w=600" alt="Skincare Bottles" style="width: 100%; border-radius: 24px; box-shadow: var(--shadow-premium);">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 24px;">
+                    <div style="display: flex; gap: 16px; align-items: flex-start;">
+                        <div style="color: var(--color-sage-dark); font-size: 20px;">✓</div>
+                        <div>
+                            <h4 style="font-size: 18px; margin-bottom: 4px; font-weight: 500;">No AI Hallucinations</h4>
+                            <p style="font-size: 14px; color: var(--color-charcoal-muted); line-height: 1.6;">Unlike LLM chatbots that make up routines, our recommendations are coded by skincare specialists and stored securely inside our core database.</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 16px; align-items: flex-start;">
+                        <div style="color: var(--color-sage-dark); font-size: 20px;">✓</div>
+                        <div>
+                            <h4 style="font-size: 18px; margin-bottom: 4px; font-weight: 500;">Privacy-First Engineering</h4>
+                            <p style="font-size: 14px; color: var(--color-charcoal-muted); line-height: 1.6;">Your photographs are parsed locally on our secure backend and never shared with commercial cloud neural networks. Your privacy remains absolute.</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 16px; align-items: flex-start;">
+                        <div style="color: var(--color-sage-dark); font-size: 20px;">✓</div>
+                        <div>
+                            <h4 style="font-size: 18px; margin-bottom: 4px; font-weight: 500;">Tailored Ingredients</h4>
+                            <p style="font-size: 14px; color: var(--color-charcoal-muted); line-height: 1.6;">Get lists of science-backed ingredients to seek out (like ceramides, niacinamide) and precise ingredients to avoid completely depending on your type.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section id="testimonials">
+            <span class="section-tag">User Reviews</span>
+            <h2 class="section-title">Trusted by skincare enthusiasts.</h2>
+            
+            <div class="features-grid">
+                <div class="glass-card">
+                    <p style="font-style: italic; line-height: 1.6; margin-bottom: 20px; font-weight: 300;">"Lumina Skin helped me identify that my cheek skin was highly hyper-reactive. The Centella Centered Routine they recommended completely resolved my redness issues in under three weeks."</p>
+                    <h5 style="font-family: var(--font-heading); font-size: 15px; font-weight: 500;">Sophia V.</h5>
+                    <span style="font-size: 12px; color: var(--color-sage);">Dry, Sensitive Skin</span>
+                </div>
+                <div class="glass-card">
+                    <p style="font-style: italic; line-height: 1.6; margin-bottom: 20px; font-weight: 300;">"I was skeptical about face mapping, but the oval shape anti-aging routine perfectly targetted my fine lines. The layout and scientific explanations are exceptionally premium."</p>
+                    <h5 style="font-family: var(--font-heading); font-size: 15px; font-weight: 500;">Marcus K.</h5>
+                    <span style="font-size: 12px; color: var(--color-sage);">Combination, Age 42</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq">
+            <span class="section-tag">Frequently Asked Questions</span>
+            <h2 class="section-title">Curious? Here are answers.</h2>
+            
+            <div class="faq-container">
+                <div class="faq-item" id="faq-1">
+                    <div class="faq-question">
+                        How accurate is the computer vision skin analysis?
+                        <span class="faq-toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Our algorithms use specific color, pixel clusters, and variance filters to detect surface levels of sebum oil, red regions, and under-eye values. While it offers excellent clinical screening of basic skin conditions, it does not replace a professional medical diagnosis by a dermatologist.</p>
+                    </div>
+                </div>
+                <div class="faq-item" id="faq-2">
+                    <div class="faq-question">
+                        Is my photo stored in the system?
+                        <span class="faq-toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes. To allow you to access and review your premium digital skin score over time or share the link, a stylized copy of your photo with the scientific wireframe overlay is saved locally on our secure, encrypted server. You can request deletion at any time.</p>
+                    </div>
+                </div>
+                <div class="faq-item" id="faq-3">
+                    <div class="faq-question">
+                        Why choose Lumina over standard AI recommendations?
+                        <span class="faq-toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Generative AIs can hallucinate skincare ingredient cocktails that counteract or irritate your skin. Lumina Skin is fully database-driven, meaning every single routine and product recommendation has been safely hand-configured according to dermatological standards.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <a href="/" class="logo" style="margin-bottom: 16px;">LUMINA<span>SKIN</span><span class="logo-dot"></span></a>
+                <p style="font-size: 13px; color: var(--color-charcoal-muted); line-height: 1.6;">Where luxury aesthetics meet clinical database logic. Science-backed routines without the AI guesswork.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="#features">Science</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="/upload">Start Analysis</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Admin Space</h4>
+                <ul>
+                    <li><a href="/login">Admin Login</a></li>
+                    <li><a href="/register">Register</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Lumina Skin Inc. All rights reserved.</p>
+            <p>Designed with Apple-Inspired Scientific Aesthetics.</p>
+        </div>
+    </footer>
+
+    <!-- Vanilla Javascript for FAQ Accordion -->
+    <script>
+        document.querySelectorAll('.faq-question').forEach(item => {
+            item.addEventListener('click', event => {
+                const parent = item.parentElement;
+                const wasActive = parent.classList.contains('active');
+                document.querySelectorAll('.faq-item').forEach(child => {
+                    child.classList.remove('active');
+                });
+                if (!wasActive) {
+                    parent.classList.add('active');
+                }
+            });
+        });
+    </script>
+
+    <!-- Firebase Sign-Out (v10 Modular) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAA0DmT_ld_FWiwWnnz78e6XbvWs-B9eFg",
+            authDomain: "lumina-6d262.firebaseapp.com",
+            projectId: "lumina-6d262",
+            storageBucket: "lumina-6d262.firebasestorage.app",
+            messagingSenderId: "397169702043",
+            appId: "1:397169702043:web:27f6c78380bb534273823e",
+            measurementId: "G-E7X424RWLK"
+        };
+
+        const app  = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const signOutBtn = document.getElementById('btn-index-signout');
+        if (signOutBtn) {
+            signOutBtn.addEventListener('click', async () => {
+                try { await signOut(auth); } catch (e) { console.warn(e); }
+                window.location.href = '/logout';
+            });
+        }
+    </script>
+</body>
+</html>
